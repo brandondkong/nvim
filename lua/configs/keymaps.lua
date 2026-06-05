@@ -12,7 +12,23 @@ vim.keymap.set("n", "<leader>ps", function()
 end)
 
 -- Goto definition remaps
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { noremap = true, silent = true, buffer = bufnr })
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(e)
+		local opts = { buffer = e.buf }
+		vim.keymap.set("n", "gd", function()
+			vim.lsp.buf.definition()
+		end, opts)
+		vim.keymap.set("n", "K", function()
+			vim.lsp.buf.hover()
+		end, opts)
+		vim.keymap.set("n", "<leader>vrr", function()
+			vim.lsp.buf.references()
+		end, opts)
+		vim.keymap.set("n", "<leader>vrn", function()
+			vim.lsp.buf.rename()
+		end, opts)
+	end,
+})
 
 -- Harpoon remaps
 vim.keymap.set("n", "<leader>a", function()
