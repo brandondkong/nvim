@@ -9,5 +9,7 @@ vim.lsp.config("lua_ls", {
 	},
 })
 
+vim.lsp.config("ts_ls", {})
+
 print("Enabling language servers...")
-vim.lsp.enable({ "lua_ls" })
+vim.lsp.enable({ "lua_ls", "ts_ls" })
