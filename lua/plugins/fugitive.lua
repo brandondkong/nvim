@@ -8,7 +8,7 @@ return {
 		end)
 
 		vim.keymap.set("n", "<leader>P", function()
-			vim.cmd.Git({ "pull", "--rebase" })
+			vim.cmd.Git("pull --rebase")
 		end)
 
 		vim.keymap.set("n", "<leader>T", ":Git push -u origin ")
