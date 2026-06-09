@@ -12,6 +12,7 @@ return {
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip",
 		"j-hui/fidget.nvim",
+        "onsails/lspkind.nvim",
 	},
 
 	config = function()
@@ -115,6 +116,45 @@ return {
 				{ name = "buffer" },
 			}),
 		})
+
+        local lspkind = require("lspkind")
+        cmp.setup({
+            formatting = {
+                fields = { "kind", "icon", "abbr", "menu" },
+                format = lspkind.cmp_format({
+                    before = function(entry, item)
+                        local detail = entry.completion_item.detail
+                        if detail and detail ~= "" then
+                            item.menu = (item.menu or "") .. " " .. detail
+                        end
+                        return item
+                    end,
+                }),
+            },
+            window = {
+                completion = cmp.config.window.bordered(),
+                documentation = cmp.config.window.bordered(),
+            },
+            snippet = {
+                expand = function(args)
+                    require("luasnip").lsp_expand(args.body) -- For luasnip users.
+                end,
+            },
+            mapping = cmp.mapping.preset.insert({
+                ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+                ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+                ["<C-Space>"] = cmp.mapping.complete(),
+            }),
+            sources = cmp.config.sources({
+                { name = "copilot", group_index = 2 },
+                { name = "nvim_lsp" },
+                { name = "luasnip" }, -- For luasnip users.
+                { name = "nvim_lsp_signature_help" }
+            }, {
+                { name = "buffer" },
+            }),
+        })
 
 		vim.diagnostic.config({
 			-- update_in_insert = true,
